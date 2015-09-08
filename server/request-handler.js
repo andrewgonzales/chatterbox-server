@@ -28,16 +28,20 @@ var storage = {
 var requestHandler = function(request, response) {
   var statusCode;
   var headers = defaultCorsHeaders;
-  if (request.method === 'OPTIONS') {
+
+  if (!storage[request.url]){
+    statusCode = 404;
+  } else if (request.method === 'OPTIONS') {
+    
     headers['Content-Type'] = "text/plain";
     statusCode = 200;
-  }
-  else if (request.method === 'GET'){
+  } else if (request.method === 'GET'){
+    
     statusCode = 200;
     // var response = 
     headers['Content-Type'] = "application/JSON";
-  }
-  else if (request.method === 'POST'){
+  } else if (request.method === 'POST'){
+    
     var postContent = '';
     statusCode = 201;
     headers['Content-Type'] = "application/JSON";

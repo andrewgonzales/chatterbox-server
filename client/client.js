@@ -1,5 +1,5 @@
 var Message = Backbone.Model.extend({
-  url: 'http://127.0.0.1:3000/classes/chatterbox/', //replaced with new server
+  url: 'http://127.0.0.1:3000', //classes/chatterbox/', //replaced with new server
   defaults: {
     username: '',
     text: ''
@@ -10,7 +10,7 @@ var Message = Backbone.Model.extend({
 var Messages = Backbone.Collection.extend({
 
   model: Message,
-  url: 'http://127.0.0.1:3000/classes/chatterbox/',  
+  url: 'http://127.0.0.1:3000', //classes/chatterbox/',  
 
 // **** Fetching data we don't have?*******
   loadMsgs: function() {

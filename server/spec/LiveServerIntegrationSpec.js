@@ -1,17 +1,40 @@
 var request = require('request');
 var expect = require('../../node_modules/chai/chai').expect;
+var stubs = require("./Stubs.js");
+// var response = stubs.response;
+var handleRequest = require("../request-handler.js");
+var requestHandler = handleRequest.requestHandler;
+
+
+
+
+
+
 
 describe('server', function() {
   it('should respond to GET requests for /log with a 200 status code', function(done) {
-    var request = new stubs.request('/classes/messages', 'GET');
-    var response = new stubs.response();
+    var req = new stubs.request('/classes/messages', 'GET');
+    var res = new stubs.response();
+    // var request = stubs.request;
+    // var response = stubs.response;
 
-requestHandler(request, response);
-    request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
-      expect(response.statusCode).to.equal(200);
-      done();
+  requestHandler(req, res);
+
+      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+        expect(response.statusCode).to.equal(200);
+        done();
+      });
     });
-  });
+
+
+
+
+
+
+
+
+
+
 
   it('should send back parsable stringified JSON', function(done) {
     request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
