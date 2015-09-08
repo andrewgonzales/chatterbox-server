@@ -18,30 +18,46 @@ this file and include it in basic-server.js so that it actually works.
 var server = 'http://127.0.0.1:3000';
 var storage = {
   '/classes/room1': [],
+  '/classes/messages': []
+  // '/log': []
 };
 
 // var urlKey = Object.keys(storage);
 
+
 var requestHandler = function(request, response) {
   var statusCode;
-  if (request.method === 'GET'){
+  var headers = defaultCorsHeaders;
+  if (request.method === 'OPTIONS') {
+    headers['Content-Type'] = "text/plain";
     statusCode = 200;
+  }
+  else if (request.method === 'GET'){
+    statusCode = 200;
+    // var response = 
+    headers['Content-Type'] = "application/JSON";
   }
   else if (request.method === 'POST'){
     var postContent = '';
     statusCode = 201;
+    headers['Content-Type'] = "application/JSON";
     request.on('data', function(data){
-      postContent += data;
+    postContent += data;
     });
     request.on('end', function(){
       var parsedContent = JSON.parse(postContent);
       storage[request.url].push(parsedContent);
-    })
+    });
   }
   //'http://127.0.0.1:3000/classes/room1/'
-  debugger;
-  var data = {url: server + request.url, username: "Barney Flintstone", text: "Yaba Daba Doo", results: storage[request.url]};
-  var stringified = JSON.stringify(data);
+  // debugger;
+  if (request.url === '/classes/room1') {
+    var data = {url: server + request.url, /*username: "Barney Flintstone", text: "Yaba Daba Doo", */results: storage[request.url]};
+    var stringified = JSON.stringify(data);
+  } else if (request.url === '/classes/messages') {
+    var data = {url: server + request.url, results: storage[request.url]};
+    var stringified = JSON.stringify(data);
+  }
 
   // console.log(storage[request[url]]);
   // storage[request[url]].push(request[_postData]);
@@ -68,14 +84,14 @@ var requestHandler = function(request, response) {
   // var statusCode = 200;
 
   // See the note below about CORS headers.
-  var headers = defaultCorsHeaders;
+  // var headers = defaultCorsHeaders;
 
   // Tell the client we are sending them plain text.
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
   // headers['Content-Type'] = "text/plain";
-  headers['Content-Type'] = "application/JSON";
+  // headers['Content-Type'] = "application/JSON";
 
 
   // .writeHead() writes to the request line and headers of the response,
@@ -111,3 +127,9 @@ var defaultCorsHeaders = {
 };
 
 exports.requestHandler = requestHandler;
+
+// var request = new stubs.request('/classes/messages', 'GET');
+// var response = new stubs.response();
+
+// requestHandler(request, response);
+
