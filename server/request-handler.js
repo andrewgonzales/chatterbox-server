@@ -14,15 +14,38 @@ this file and include it in basic-server.js so that it actually works.
 
 **************************************************************/
 
+// var urls = [];
+var server = 'http://127.0.0.1:3000';
+var storage = {
+  '/classes/room1': [],
+};
+
+// var urlKey = Object.keys(storage);
+
 var requestHandler = function(request, response) {
-
-  // var urls = [];
-  // var storage = {
-  //   '/classes/room1/': [],
-  // };
-
-  var data = {url: 'http://127.0.0.1:3000/classes/room1/', username: "Barney Flintstone", text: "Yaba Daba Doo", results: []};
+  var statusCode;
+  if (request.method === 'GET'){
+    statusCode = 200;
+  }
+  else if (request.method === 'POST'){
+    var postContent = '';
+    statusCode = 201;
+    request.on('data', function(data){
+      postContent += data;
+    });
+    request.on('end', function(){
+      var parsedContent = JSON.parse(postContent);
+      storage[request.url].push(parsedContent);
+    })
+  }
+  //'http://127.0.0.1:3000/classes/room1/'
+  debugger;
+  var data = {url: server + request.url, username: "Barney Flintstone", text: "Yaba Daba Doo", results: storage[request.url]};
   var stringified = JSON.stringify(data);
+
+  // console.log(storage[request[url]]);
+  // storage[request[url]].push(request[_postData]);
+
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
@@ -42,7 +65,7 @@ var requestHandler = function(request, response) {
   console.log("Serving request type " + request.method + " for url " + request.url);
 
   // The outgoing status.
-  var statusCode = 200;
+  // var statusCode = 200;
 
   // See the note below about CORS headers.
   var headers = defaultCorsHeaders;
