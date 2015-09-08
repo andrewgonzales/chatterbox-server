@@ -1,3 +1,5 @@
+
+var stubs = require("./spec/Stubs.js");
 /*************************************************************
 
 You should implement your request handler function in this file.
@@ -13,11 +15,21 @@ this file and include it in basic-server.js so that it actually works.
 **************************************************************/
 
 var requestHandler = function(request, response) {
+
+  // var urls = [];
+  // var storage = {
+  //   '/classes/room1/': [],
+  // };
+
+  var data = {url: 'http://127.0.0.1:3000/classes/room1/', username: "Barney Flintstone", text: "Yaba Daba Doo", results: []};
+  var stringified = JSON.stringify(data);
   // Request and Response come from node's http module.
   //
   // They include information about both the incoming request, such as
   // headers and URL, and about the outgoing response, such as its status
   // and content.
+
+
   //
   // Documentation for both request and response can be found in the HTTP section at
   // http://nodejs.org/documentation/api/
@@ -39,7 +51,9 @@ var requestHandler = function(request, response) {
   //
   // You will need to change this if you are sending something
   // other than plain text, like JSON or HTML.
-  headers['Content-Type'] = "text/plain";
+  // headers['Content-Type'] = "text/plain";
+  headers['Content-Type'] = "application/JSON";
+
 
   // .writeHead() writes to the request line and headers of the response,
   // which includes the status and all headers.
@@ -52,7 +66,9 @@ var requestHandler = function(request, response) {
   //
   // Calling .end "flushes" the response's internal buffer, forcing
   // node to actually send all the data over to the client.
-  response.end("Hello, World!");
+  // response.end("Hello, World!");
+  // response.end(JSON.stringify(stubs.data));
+  response.end(stringified);
 };
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
@@ -71,3 +87,4 @@ var defaultCorsHeaders = {
   "access-control-max-age": 10 // Seconds.
 };
 
+exports.requestHandler = requestHandler;
